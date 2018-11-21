@@ -1,4 +1,5 @@
-import dash, math, dash_auth
+import dash, math
+# import dash_auth
 from dash.dependencies import Input, Output, State, Event
 import dash_core_components as dcc
 import dash_html_components as html
@@ -8,15 +9,15 @@ import plotly.graph_objs as go
 
 
 
-VALID_USERNAME_PASSWORD_PAIRS = [
-    ['hello', 'world']
-]
+# VALID_USERNAME_PASSWORD_PAIRS = [
+#     ['hello', 'world']
+# ]
 
 app = dash.Dash(__name__)
-auth = dash_auth.BasicAuth(
-    app,
-    VALID_USERNAME_PASSWORD_PAIRS
-)
+# auth = dash_auth.BasicAuth(
+#     app,
+#     VALID_USERNAME_PASSWORD_PAIRS
+# )
 
 app.config.suppress_callback_exceptions = True
 

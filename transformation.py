@@ -7,56 +7,16 @@ def is_nrofam(x):
     else:
         return True
     
-def transform(tipo, rut, giro, nombre, apellidopaterno, apellidomaterno, rutcontacto, nombrecontacto,
-    apellidocontacto, telcontacto, celcontacto, email, direccion, numero, depto, region, provincia,
-    comuma, rangoedad, sexo, nacionalidad, estadocivil, nrogrupofamiliar, actividad, cargo, situacionlaboral,
-    empleador, antiguedadlaboral, fechanacimiento, presencial, remoto, medio):
+def transform(
+    # tipo, rut, giro, nombre, apellidopaterno, apellidomaterno, rutcontacto, nombrecontacto,
+    # apellidocontacto, telcontacto, celcontacto, email, direccion, numero, depto, region, provincia,
+    # comuma, rangoedad, sexo, nacionalidad, estadocivil, nrogrupofamiliar, actividad, cargo, situacionlaboral,
+    # empleador, antiguedadlaboral, fechanacimiento, presencial, remoto, medio
+    df_cliente_nuevo
+    ):
+    # print(df_cliente_nuevo.columns)
     
-    comuna = 'Otro'; region = 'Metropolitana'; provincia= 'Santiago'
-    
-#     print(tipo, rut, giro, nombre, apellidopaterno, apellidomaterno, rutcontacto, nombrecontacto,
-#     apellidocontacto, telcontacto, celcontacto, email, direccion, numero, depto, region, provincia,
-#     comuma, rangoedad, sexo, nacionalidad, estadocivil, nrogrupofamiliar, actividad, cargo, situacionlaboral,
-#     empleador, antiguedadlaboral, fechanacimiento, presencial, remoto, medio)
-
-    direccion = direccion + ' ' + str(numero) + ' '+ str(depto)
-    nombre_completo = nombre + ' ' + apellidopaterno + ' ' + apellidomaterno
-    
-    new = {
-        'tipo cliente':[tipo], #1
-        'rut':[rut], #2
-        'giro' : [giro], #3
-        'nombre' : [nombre], #4
-        'apellido 1' : [apellidopaterno], #5
-        'apellido 2' : [apellidomaterno], #6
-        'nombre completo' : [nombre_completo], #7
-        'rutcontacto' : [rutcontacto], #8
-        'nombrecontacto' : [nombrecontacto], #9
-        'apellidocontacto' : [apellidocontacto],  #10
-        'telefono' :[ telcontacto], #11
-        'celular' : [celcontacto], #12
-        'correo electronico' : [email], #13
-        'direccion' : [direccion], #14
-        'region' : [region], #15
-        'provincia' : [provincia], #16
-        'comuna' : [comuna], #17
-        'rangoedad' : [rangoedad], #18
-        'sexo' : [sexo], #19
-        'nacionalidad' : [nacionalidad], #20
-        'estado civil' : [estadocivil], #21
-        'nrogrupofamiliar' : [nrogrupofamiliar], 
-        'actividad' : [actividad], 
-        'cargo' : [cargo], 
-        'situacionlaboral' : [situacionlaboral],
-        'empleador' : [empleador], 
-        'antiguedadlaboral': [antiguedadlaboral], 
-        'fecha nacimiento' : [fechanacimiento], 
-        'presencial' : [presencial], 
-        'remoto' : [remoto], 
-        'medio' : [medio]
-        }
-
-    new_persona = pd.DataFrame.from_dict(new)
+    new_persona = df_cliente_nuevo
     # print(new_persona.columns)
     ###############################################################################################################
     
@@ -69,7 +29,7 @@ def transform(tipo, rut, giro, nombre, apellidopaterno, apellidomaterno, rutcont
         {'VIII Región del Bío-Bío':'Bio-Bio',
          'XIII Región Metropolitana de Santiago':'Metropolitana'}
     )
-    new_persona ['loc_region'] = new_persona ['region'].replace(
+    new_persona ['loc_region'] = new_persona ['loc_region'].replace(
         ['II Región de Antofagasta',
            'IV Región de Coquimbo', 'VII Región del Maule',
            'X Región de Los Lagos',
@@ -87,7 +47,7 @@ def transform(tipo, rut, giro, nombre, apellidopaterno, apellidomaterno, rutcont
     {'Concepción':'Concepcion',
      'Santiago':'Santiago'}
     )
-    new_persona['loc_provincia'] = new_persona['provincia'].replace(
+    new_persona['loc_provincia'] = new_persona['loc_provincia'].replace(
         ['Antofagasta', 'Limarí', 'Talca', 'Biobío', 'Ñuble',
            'Llanquihue','Maipo', 'Valparaíso', 'Cachapoal',
            'Arauco', 'Valdivia', 'Coyhaique', 'Linares', 'Osorno',
@@ -153,17 +113,20 @@ def transform(tipo, rut, giro, nombre, apellidopaterno, apellidomaterno, rutcont
     if new_persona['sexo'].tolist()[0] == 'Sin Información':
         # new_persona['sexo'] = 'sin información'
         new_persona['sexo'] = 'sin informaciÃ³n'
-        
+    
+    for column in new_persona.columns:
+        new_persona[column] = [ x.replace('ó', 'Ã³') if isinstance(x, str) else x for x in new_persona[column].tolist()]
+
     ########################################################################################################################
     
     # print('\n','Resultados')
-    print(new_persona ['loc_region'], new_persona ['loc_provincia'],  new_persona ['loc_comuna'],
-          new_persona['is_nombre'], new_persona['is_apellido1'], new_persona['is_apellido2'], 
-          new_persona['is_nombrecompleto'], new_persona['is_correo'], new_persona['is_direccion'],
-          new_persona['is_telefono'],  new_persona['is_actividad'],  new_persona['is_estado_civil'],
-          new_persona['is_fnac'], new_persona['is_celular'],
-         new_persona['medio'], new_persona['sexo'], new_persona['actividad'], new_persona['tipo cliente'],
-         new_persona['is_recontacto'], new_persona['is_presencial'], new_persona['is_remoto'])
+    # print(new_persona ['loc_region'], new_persona ['loc_provincia'],  new_persona ['loc_comuna'],
+    #       new_persona['is_nombre'], new_persona['is_apellido1'], new_persona['is_apellido2'], 
+    #       new_persona['is_nombrecompleto'], new_persona['is_correo'], new_persona['is_direccion'],
+    #       new_persona['is_telefono'],  new_persona['is_actividad'],  new_persona['is_estado_civil'],
+    #       new_persona['is_fnac'], new_persona['is_celular'],
+    #      new_persona['medio'], new_persona['sexo'], new_persona['actividad'], new_persona['tipo cliente'],
+    #      new_persona['is_recontacto'], new_persona['is_presencial'], new_persona['is_remoto'])
     
     new_persona =  new_persona[['actividad', 'is_apellido1', 'is_apellido2','is_celular', 'is_direccion', 'is_fnac', 'is_nombre',
                                  'is_nombrecompleto', 'is_nrofam', 'is_presencial', 'is_profesion',

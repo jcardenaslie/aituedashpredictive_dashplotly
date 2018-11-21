@@ -41,9 +41,13 @@ app.layout = html.Div(children=[
         html.Div(id="tab_content", className="row", style={"margin": "2% 3%"}),
 
         ######################################################################################
-        html.Div(id="temporal_client", style={"display": "none"},),
+        html.Div(id="temporal_cliente", style={"display": "none"},),
         html.Div(id="personas_bd", style={"display": "none"},),
+        html.Div(id="nuevo_cliente", style={"display": "none"},),
         html.Div(id="opportunities_df", style={"display": "none"},),
+        
+
+
         ######################################################################################
         html.Link(href="https://use.fontawesome.com/releases/v5.2.0/css/all.css",
             rel="stylesheet"),

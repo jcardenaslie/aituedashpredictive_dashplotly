@@ -672,9 +672,10 @@ def modal():
                         ),
 
                         # submit button
-                        html.Span(
+                        html.Button(
                             "Agregar",
                             id="submit_new_case",
+                            type='submit',
                             n_clicks=0,
                             className="button button--primary add"
                         ),
