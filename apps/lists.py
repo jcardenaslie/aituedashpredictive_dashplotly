@@ -105,7 +105,7 @@ layout = [
             },
             children=[
                 html.H6(
-                    "Ranking Negocio",
+                    "Ranking Compra",
                 ),
                 drc.Card(style={"padding":"0px"}, children=[
                     html.Div([
@@ -156,13 +156,18 @@ def rank_list_negocio_callback(dataset, modelo):
     b_personas['t_proba'] = dm.models['negocio_nois'].predict_proba(X_test_m)[:,1]
     
     new = personas.merge(b_personas, left_index=True, right_index=True)
+       
     
-    new2 = new.merge(personas_info, left_on='rut', right_on='rut', how='left')
-    df = new2[['rut', 'nombre','correo','t_proba', 'y_pred','target','nro_cot_depto_y','nro_cot_depto_x']]
+    to_merge = ['rut', 'nombre', 'apellido1', 'apellido2', 'celular', 'direccion',
+  'correo', 'edad', 'trabajo', 'tipo_cliente', 'sexo', 'actividad']
+
+    new2 = new.merge(personas_info, left_on=to_merge, right_on=to_merge, how='left')
+    new2['t_proba'] = ['%.4f'%x for x in new2['t_proba']]
+
+
+    df = new2[['rut', 'nombre','correo', 't_proba']]
     df = df.sort_values(by='t_proba', ascending=False)
-    
     df = df.head(30)
-    # print('NEGOCIO',df)
     return df_to_table(df)
 
 @app.callback(
@@ -190,13 +195,21 @@ def rank_list_compra_callback(dataset, modelo):
     b_personas['t_proba'] = dm.models['compra_nois'].predict_proba(X_test_m)[:,1]
     
     new = personas.merge(b_personas, left_index=True, right_index=True)
-    
 
-    new2 = new.merge(personas_info, left_on='rut', right_on='rut', how='left')
-    df = new2[['rut', 'nombre','correo','t_proba', 'y_pred','target','nro_cot_depto_y','nro_cot_depto_x']]
+
+    to_merge = ['rut', 'nombre', 'apellido1', 'apellido2', 'celular', 'direccion',
+                'correo', 'edad', 'trabajo', 'tipo_cliente', 'sexo', 'actividad']
+
+    new2 = new.merge(personas_info, left_on=to_merge, right_on=to_merge, how='left')
+    new2['t_proba'] = ['%.4f'%x for x in new2['t_proba']]
+    
+    df = new2[['rut', 'nombre','correo','t_proba']]
     df = df.sort_values(by='t_proba', ascending=False)
+
+    # for column in df.columns:
+    #     if df[column].dtype == bool:
+    #         df[column] = [ 'Si' if x == True  else 'No' for x in df[column]]
     
     df = df.head(30)
-    # print('COMPRA',df)
     return df_to_table(df)
 

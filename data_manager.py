@@ -23,11 +23,11 @@ no_is_time_price = [
     'precio_cotizacion_median', 'precio_cotizacion_std', 
     'tiempo_cotizacion_media', 'tiempo_cotizacion_median',
     'tiempo_cotizacion_std',   
-    'Altos del Valle',
-    'Edificio Urban 1470', 
+    'altos del valle',
+    'edificio urban 1470', 
     # 'San Andres Del Valle', 
-    'Edificio Mil610',
-       'Edificio Junge']
+    'edificio mil610',
+       'edificio junge']
 
 
 is_no_time_price = ['actividad', 'is_apellido1', 'is_apellido2',
@@ -40,7 +40,7 @@ is_no_time_price = ['actividad', 'is_apellido1', 'is_apellido2',
 
 personal_info = [
   'rut', 'nombre', 'apellido1', 'apellido2', 'celular', 'direccion',
-  'correo', 'edad', 'trabajo', 'tipo_cliente', 'sexo'
+  'correo', 'edad', 'trabajo', 'tipo_cliente', 'sexo', 'actividad'
   ]
 
 
@@ -59,12 +59,17 @@ print('--END READ TEST DATA','Time: ', stop - start)
 ################################################################################################
 #MODELOS
 start = timeit.default_timer()
-clf_compra_nois = joblib.load('Data/Models/RFCV2_compra_nois.joblib')
-clf_negocio_nois = joblib.load('Data/Models/LRCV2_negocio_nois.joblib')
+# clf_compra_nois = joblib.load('Data/Models/RFCV2_compra_nois.joblib')
+# clf_negocio_nois = joblib.load('Data/Models/LRCV2_negocio_nois.joblib')
 
 
-clf_compra_is = joblib.load('Data/Models/LRCV2_compra_is.joblib')
-clf_negocio_is = joblib.load('Data/Models/RFCV2_negocio_is.joblib')
+# clf_compra_is = joblib.load('Data/Models/LRCV2_compra_is.joblib')
+# clf_negocio_is = joblib.load('Data/Models/RFCV2_negocio_is.joblib')
+
+clf_compra_nois = joblib.load('Data/Models/RFCV3_compra_nois.joblib')
+clf_negocio_nois = joblib.load('Data/Models/LRCV3_negocio_nois.joblib')
+clf_compra_is = joblib.load('Data/Models/RFCV3_compra_is.joblib')
+clf_negocio_is = joblib.load('Data/Models/RFCV3_negocio_is.joblib')
 
 models = {}
 models['negocio_nois'] = clf_negocio_nois
@@ -80,10 +85,11 @@ start = timeit.default_timer()
 
 proyecto_select = 'San Andres Del Valle'
 #personas para hacer get dummies
-p_for_dummies = pd.read_csv('Data/personas_cotizacion8.csv', index_col=[0], encoding = "ISO-8859-1") # 
+p_for_dummies = pd.read_csv('Data/personas_cotizacion10.csv', index_col=[0], encoding = "ISO-8859-1") # 
+cot_all = pd.read_csv('Data/cotizaciones_all.csv', index_col=[0], encoding = "ISO-8859-1")
 #personas que cotizaron en sdv sin haber hecho get dummies
-personas = pd.read_csv('Data/personas_filtrado.csv', index_col=[0], encoding = "ISO-8859-1")
-personas_info = pd.read_csv('Data/personas_cotizacion9.csv', index_col=[0], encoding = "ISO-8859-1") # 
+personas = pd.read_csv('Data/personas_filtro.csv', index_col=[0], encoding = "ISO-8859-1")
+personas_info = pd.read_csv('Data/personas_cotizacion10.csv', index_col=[0], encoding = "ISO-8859-1") # 
 
 stop = timeit.default_timer()
 print('--END READ PERSONAS DATA','Time: ', stop - start)

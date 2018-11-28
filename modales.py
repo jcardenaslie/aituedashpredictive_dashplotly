@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from chile import regiones, provincias, comunas
 
-def modal():
+def modal_nuevo_cliente():
     return html.Div(
         html.Div([
             html.Div([
@@ -34,8 +34,8 @@ def modal():
                 ),
                 # modal form
                 html.Div([
-                    # left Div
-                    html.Div([
+                # left Div
+                html.Div([
                         #Tipo Cliente
                         html.P(
                             "Tipo",
@@ -413,12 +413,8 @@ def modal():
                                                     "label": "Femenino",
                                                     "value": "Femenino",
                                                 },
-                                                {
-                                                    "label": "Sin Información",
-                                                    "value": "Sin Información",
-                                                },
                                             ],
-                                            value="Sin Información",
+                                            value="Masculino",
                                         ),
                                         #Fecha de Nacimiento
                                         html.P(
@@ -672,9 +668,99 @@ def modal():
                         ),
 
                         # submit button
+                        # html.Button(
+                        #     "Agregar",
+                        #     id="submit_new_case",
+                        #     type='submit',
+                        #     n_clicks=0,
+                        #     className="button button--primary add"
+                        # ),
+                        # submit button
+                        html.Span(
+                            "Submit",
+                            id="submit_new_case",
+                            n_clicks=0,
+                            className="button button--primary add"
+                        ),
+
+                ],
+                    className="modal-content",
+                    style={"textAlign": "center", "border": "1px solid #C8D4E3"},
+                )
+            ],
+            className="modal",
+        ),
+        id="cases_modal",
+        style={"display": "none"},
+)
+
+def modal_agregar_cotizacion():
+    return html.Div(
+        html.Div([
+            html.Div([
+                # modal header
+                html.Div([
+                    html.Span(
+                        "Agregar Cliente",
+                        style={
+                            "color": "#506784",
+                            "fontWeight": "bold",
+                            "fontSize": "20",
+                        },
+                    ),
+                    html.Span(
+                        "×",
+                        id="new_cot_modal_close",
+                        n_clicks=0,
+                        style={
+                            "float": "right",
+                            "cursor": "pointer",
+                            "marginTop": "0",
+                            "marginBottom": "17",
+                        },
+                    ),
+                ],
+                    className="row",
+                    style={"borderBottom": "1px solid #C8D4E3"},
+                ),
+                # modal form
+                html.Div([
+                    # left Div
+                    html.Div([
+                        
+                                        
+                    ],
+                    className="four columns",
+                    style={"paddingRight": "15"},
+                    ),
+
+                # left Div
+                html.Div(
+                    [
+                                        
+                    ],
+                    className="four columns",
+                    style={"paddingRight": "15"},
+                    ),
+
+
+                # right Div
+                html.Div(
+                    [
+                                       
+                    ],
+                    className="four columns",
+                    style={"paddingLeft": "15"},
+                    ),
+            ],
+            style={"marginTop": "10", "textAlign": "center"},
+            className="row",
+            ),
+
+                        # submit button
                         html.Button(
                             "Agregar",
-                            id="submit_new_case",
+                            id="submit_new_cot",
                             type='submit',
                             n_clicks=0,
                             className="button button--primary add"
@@ -687,6 +773,6 @@ def modal():
             ],
             className="modal",
         ),
-        id="cases_modal",
+        id="new_cot_modal",
         style={"display": "none"},
 )

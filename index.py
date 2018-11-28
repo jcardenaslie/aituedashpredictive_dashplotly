@@ -8,8 +8,14 @@ from app import app
 
 from apps import lists, persona, nuevocliente
 
+import data_manager as dm
+
 
 app.layout = html.Div(children=[
+        dcc.ConfirmDialog(
+            id='confirm-dialog',
+            message='Danger danger! Are you sure you want to continue?',
+        ),
         # header
         html.Div([
             html.Span("AITUE DASH ML", className='app-title'),
@@ -28,8 +34,8 @@ app.layout = html.Div(children=[
                 style={"height":"20","verticalAlign":"middle"},
                 children=[
                     dcc.Tab(label="Nuevo Cliente", value="nuevocliente_tab"),
-                    dcc.Tab(label="Clientes", value="clientes_tab"),
-                    dcc.Tab(label="Listas", value="lists_tab"),
+                    dcc.Tab(label="Clientes Historicos", value="clientes_tab"),
+                    dcc.Tab(label="Listas Clientes", value="lists_tab"),
                     
                 ],
                 value="nuevocliente_tab",
@@ -41,9 +47,10 @@ app.layout = html.Div(children=[
         html.Div(id="tab_content", className="row", style={"margin": "2% 3%"}),
 
         ######################################################################################
-        html.Div(id="temporal_cliente", style={"display": "none"},),
-        html.Div(id="personas_bd", style={"display": "none"},),
-        html.Div(id="nuevo_cliente", style={"display": "none"},),
+        # html.Div(id="temporal_cliente", style={"display": "none"},),
+        html.Div(dm.personas_info.to_json(orient='split'), id="personas_bd", style={"display": "none"},),
+        html.Div(dm.personas_info.shape[0], id="personas_bd_size", style={"display": "none"},),
+        # html.Div(id="nuevo_cliente", style={"display": "none"},),
         html.Div(id="opportunities_df", style={"display": "none"},),
         
 

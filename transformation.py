@@ -1,23 +1,18 @@
 import pandas as pd
 import numpy as np
 
+from chile import provincias
+
 def is_nrofam(x):
     if x == 'Sin Información':
         return False
     else:
         return True
     
-def transform(
-    # tipo, rut, giro, nombre, apellidopaterno, apellidomaterno, rutcontacto, nombrecontacto,
-    # apellidocontacto, telcontacto, celcontacto, email, direccion, numero, depto, region, provincia,
-    # comuma, rangoedad, sexo, nacionalidad, estadocivil, nrogrupofamiliar, actividad, cargo, situacionlaboral,
-    # empleador, antiguedadlaboral, fechanacimiento, presencial, remoto, medio
-    df_cliente_nuevo
-    ):
-    # print(df_cliente_nuevo.columns)
-    
+def transform_persona_is(df_cliente_nuevo):
     new_persona = df_cliente_nuevo
-    # print(new_persona.columns)
+    new_persona = transform_df_lower_accent(new_persona)
+    # print(new_persona)
     ###############################################################################################################
     
     new_persona['medio_inicial'] = new_persona['medio']
@@ -25,74 +20,68 @@ def transform(
     new_persona['is_nrofam'] = [ is_nrofam(x) for x in new_persona['nrogrupofamiliar'] ]
     
     #REGION#######################################################################################################
-    new_persona ['loc_region'] = new_persona ['region'].replace(
-        {'VIII Región del Bío-Bío':'Bio-Bio',
-         'XIII Región Metropolitana de Santiago':'Metropolitana'}
+    new_persona.loc_region = []
+    new_persona['loc_region'] = new_persona['region'].replace(
+        {'viii region del bio-bio':'bio-bio',
+         'xiii region metropolitana de santiago':'metropolitana'}
     )
-    new_persona ['loc_region'] = new_persona ['loc_region'].replace(
-        ['II Región de Antofagasta',
-           'IV Región de Coquimbo', 'VII Región del Maule',
-           'X Región de Los Lagos',
-           'V Región de Valparaíso',
-           'VI Región del Libertador General Bernardo O Higgins',
-           'XIV Región de Los Ríos',
-           'XI Región de Aysen del General Carlos Ibáñez del Campo',
-           'I Región de Tarapacá', 'IX Región de La Araucanía',
-           'XII Región de Magallanes y de La Antártica Chilena',
-           'XV Region de Arica y Parinacota', 'III Región de Atacama'],'Otro'
+    new_persona['loc_region'] = new_persona['loc_region'].replace(
+        ['ii region de antofagasta',
+        'iv region de coquimbo', 
+        'vii region del maule',
+        'x region de los lagos',
+        'v region de valparaiso',
+        'vi region del libertador general bernardo o higgins',
+        'xiv region de los rios',
+        'xi region de aysen del general carlos ibanez del campo',
+        'i region de tarapaca', 
+        'ix region de la araucania',
+        'xii region de magallanes y de la antartica chilena',
+        'xv region de arica y parinacota',
+         'xiv region de los rios',
+        'iii region de atacama'],'otro'
     )
+
     
     #PROVINCIA#######################################################################################################
     new_persona['loc_provincia'] = new_persona['provincia'].replace(
-    {'Concepción':'Concepcion',
-     'Santiago':'Santiago'}
-    )
-    new_persona['loc_provincia'] = new_persona['loc_provincia'].replace(
-        ['Antofagasta', 'Limarí', 'Talca', 'Biobío', 'Ñuble',
-           'Llanquihue','Maipo', 'Valparaíso', 'Cachapoal',
-           'Arauco', 'Valdivia', 'Coyhaique', 'Linares', 'Osorno',
-           'San Felipe de Aconcagua', 'Iquique', 'Cautín', 'Capitán Prat',
-           'Aysén', 'Chacabuco', 'Melipilla', 'Magallanes', 'Malleco',
-           'Arica ', 'Elqui', 'El Loa', 'Cauquenes', 'Colchagua', 'Valdivia ',
-           'Copiapó', 'Última Esperanza', 'Cordillera', 'Curicó', 'Chiloé',
-           'Choapa', 'Huasco','Arica','Isla de Pascua'],'Otro'
+        {'concepcion':'concepcion',
+         'santiago':'santiago'}
     )
     
+    provincias_l = []
+    for key in provincias.keys():
+        provincias_l.extend(provincias[key])
+
+    new_persona['loc_provincia'] = [x if x in provincias_l else 'otro' \
+            for x in new_persona['loc_provincia'].tolist()]
+
     #COMUNA#######################################################################################################
-    new_persona['loc_comuna'] = new_persona['comuna'].replace(
-    ['Ovalle', 'Constitución','Tomé', 'Chillán','Yungay',
-     'Puerto Montt', 'Santiago', 'El Bosque', 'La Florida','Las Condes',
-     'Ñuñoa', 'Providencia', 'Buin','Florida','Viña del Mar',
-     'Machalí', 'Vitacura', 'Arauco', 'Contulmo', 'Concón',
-     'Santa Juana', 'Puerto Varas', 'Cañete', 'Huechuraba', 'Valdivia',
-     'Coyhaique', 'Colbún', 'Osorno', 'San Felipe', 'Iquique',
-     'Rancagua', 'Lota', 'Temuco', 'Cochrane', 'Chillán Viejo', 'Maipú',
-     'Aysén', 'Villarrica', 'La Reina', 'Peñalolén', 'Estación Central',
-     'Colina', 'Quilicura', 'Curanilahue', 'Algarrobo', 'Talca',
-     'San Carlos', 'Punta Arenas', 'Mulchén', 'Coelemu', 'Angol',
-     'Laja', 'Nacimiento', 'Arica', 'La Serena', 'Hualqui',
-     'San Miguel', 'Calama', 'Pelluhue', 'Quillón', 'Valparaíso',
-     'Llanquihue', 'Los Álamos', 'Renca', 'Santa Cruz', 'Panguipulli',
-     'Cabrero', 'Cerrillos', 'Pudahuel', 'Copiapó', 'Natales', 'Tirúa',
-     'Cauquenes', 'La Cisterna', 'Yumbel', 'Ránquil', 'Padre Las Casas',
-     'Las Cabras', 'Coquimbo', 'Lebu', 'San José de Maipo', 'San Ramón',
-     'Curicó', 'Independencia', 'Lampa ', 'Castro', 'Punitaqui',
-     'Conchalí', 'San Rosendo', 'Alto Hospicio', 'Illapel', 'Huasco',
-     'Collipulli', 'Tucapel', 'Alto Biobío','Pirque','Lampa','Isla de Pascua','Antofagasta', 'Arica'],'Otro'
-)
+    comunas_l = ['Concepcion',   'Coronel',  'Chiguayante',  'Florida',  'Hualqui',  
+     'Lota',  'Penco',  'San Pedro de la Paz',  'Santa Juana',  
+     'Talcahuano',  'Tome',  'Hualpen',
+    'Santiago',  'Cerrillos',  'Cerro Navia',  'Conchali',  'El Bosque',  
+     'Estacion Central',  'Huechuraba',  'Independencia',  'La Cisterna',  'La Florida',  'La Granja',  
+     'La Pintana',  'La Reina',  'Las Condes',  'Lo Barnechea',  'Lo Espejo',  'Lo Prado',  'Macul',  'Maipu',  
+     'nunoa',  'Pedro Aguirre Cerda',  'Peñalolén',  'Providencia',  'Pudahuel',  'Quilicura',  
+     'Quinta Normal',  'Recoleta',  'Renca',  'San Joaquin',  'San Miguel',  'San Ramon',  'Vitacura']
+    comunas_l = [x.lower() for x in comunas_l]
+
+    new_persona['loc_comuna'] = [x if x in comunas_l else 'otro' for x in new_persona['comuna'].tolist()]
+    
     #IS #####################################################################################################################
     new_persona['is_nombre'] = ~new_persona['nombre'].isnull()
-    new_persona['is_apellido1'] = ~new_persona['apellido 1'].isnull()
-    new_persona['is_apellido2'] = ~new_persona['apellido 2'].isnull()
+    new_persona['is_apellido1'] = ~new_persona['apellido1'].isnull()
+    new_persona['is_apellido2'] = ~new_persona['apellido2'].isnull()
     new_persona['is_nombrecompleto'] = ~new_persona['nombre completo'].isnull()
-    new_persona['is_correo'] = ~new_persona['correo electronico'].isnull()
+    new_persona['is_correo'] = ~new_persona['correo'].isnull()
     new_persona['is_direccion'] = ~new_persona['direccion'].isnull()
     new_persona['is_telefono'] = ~new_persona['telefono'].isnull()
     new_persona['is_actividad'] = ~new_persona['actividad'].isnull()
     new_persona['is_estado_civil'] = ~new_persona['estado civil'].isnull()
     new_persona['is_fnac'] = ~new_persona['fecha nacimiento'].isnull()
     new_persona['is_celular'] = ~new_persona['celular'].isnull()
-    new_persona['is_profesion'] = ~new_persona['cargo'].isnull()
+    new_persona['is_profesion'] = ~new_persona['trabajo'].isnull()
     ########################################################################################################################
     
     new_persona['is_recontacto'] = False
@@ -105,31 +94,94 @@ def transform(
         new_persona['is_remoto'] = True
     else: new_persona['is_remoto'] = False
     
-    # parches
-    if new_persona['actividad'].tolist()[0] == 'Sin Información':
-        # new_persona['actividad'] = 'sin información'
-        new_persona['actividad'] = 'sin informaciÃ³n'
-    
-    if new_persona['sexo'].tolist()[0] == 'Sin Información':
-        # new_persona['sexo'] = 'sin información'
-        new_persona['sexo'] = 'sin informaciÃ³n'
-    
-    for column in new_persona.columns:
-        new_persona[column] = [ x.replace('ó', 'Ã³') if isinstance(x, str) else x for x in new_persona[column].tolist()]
-
     ########################################################################################################################
-    
+    # print('BLA')
     # print('\n','Resultados')
     # print(new_persona ['loc_region'], new_persona ['loc_provincia'],  new_persona ['loc_comuna'],
     #       new_persona['is_nombre'], new_persona['is_apellido1'], new_persona['is_apellido2'], 
     #       new_persona['is_nombrecompleto'], new_persona['is_correo'], new_persona['is_direccion'],
     #       new_persona['is_telefono'],  new_persona['is_actividad'],  new_persona['is_estado_civil'],
     #       new_persona['is_fnac'], new_persona['is_celular'],
-    #      new_persona['medio'], new_persona['sexo'], new_persona['actividad'], new_persona['tipo cliente'],
+    #      new_persona['medio'], new_persona['sexo'], new_persona['actividad'], new_persona['tipo_cliente'],
     #      new_persona['is_recontacto'], new_persona['is_presencial'], new_persona['is_remoto'])
     
-    new_persona =  new_persona[['actividad', 'is_apellido1', 'is_apellido2','is_celular', 'is_direccion', 'is_fnac', 'is_nombre',
-                                 'is_nombrecompleto', 'is_nrofam', 'is_presencial', 'is_profesion',
-                                 'is_recontacto', 'is_remoto', 'is_telefono', 'loc_comuna',
-                                 'loc_provincia', 'loc_region', 'medio_inicial', 'sexo']]
+    new_persona =  new_persona[[
+        'actividad', 'is_apellido1', 'is_apellido2','is_celular', 
+        'is_direccion', 'is_fnac', 'is_nombre',
+        'is_nombrecompleto', 'is_nrofam', 'is_presencial', 'is_profesion',
+        'is_recontacto', 'is_remoto', 'is_telefono', 'loc_comuna',
+        'loc_provincia', 'loc_region', 'medio_inicial', 'sexo']]
     return new_persona
+
+# Transforma los datos de las multiples cotizaciones a datos de comportamiento por
+# cliente
+def add_persona_new_comp_cot(df):
+    comp_cot = {
+        'is_descuento': [False],
+        'valid_rut': [True],
+        'mean_cot_bod' : [0],
+        'mean_cot_depto': [0], 
+        'mean_cot_esta' : [0], 
+        'mean_cot_estu': [0], 
+        'nro_cot_bod' : [0], 
+        'nro_cot_depto' : [0], 
+        'nro_cot_esta' : [0],
+        'nro_cot_estu' : [0], 
+        'nro_proyectos' : [0], 
+        'precio_cotizacion_media' : [0],
+        'precio_cotizacion_median' : [0], 
+        'precio_cotizacion_std' : [0], 
+        'tiempo_cotizacion_media' : [0], 
+        'tiempo_cotizacion_median' : [0],
+        'tiempo_cotizacion_std' : [0],   
+        'altos del valle' : [0],
+        'edificio urban 1470' : [0], 
+        'san Andres del valle':[0], 
+        'edificio mil610': [0],
+        'edificio junge': [0]
+    }
+
+    df = df.assign(**comp_cot)
+
+    return df
+
+def trasnform_persona_info(df):
+    new = {
+        "apellido1" : [df['apellido1'].tolist()],
+        "apellido2" : [df['apellido2'].tolist()],
+        "celular" : [df['celular'].tolist()],
+        "correo"  : [df['corre electronico'].tolist()],
+        "direccion" :   [df['direccion'].tolist()],
+        "edad " : [df['apellido 1'].tolist()],
+        "trabajo" : [df['apellido 1'].tolist()],
+        }
+
+
+def transform_prospect_display_text(t_proba_value):
+    if t_proba_value >= 0.90:
+        return 'Muy buen prospecto'
+    elif t_proba_value >= 0.80:
+        return 'Buen prospecto'
+    elif t_proba_value >= 0.60:
+        return ' Prospecto regular'
+    elif t_proba_value >= 0.50 :
+        return 'Indeciso'
+    elif t_proba_value >= 0.0:
+        return 'Mal prospecto'
+
+def transform_df_lower_accent(df):
+    print("transform_df_lower_accent")
+    cot_mod = df
+    for column in cot_mod.columns:
+        if cot_mod[column].dtype == object:
+            cot_mod[column] = cot_mod[column].str.lower()
+            cot_mod[column].replace({
+                    'á':'a', 
+                    'é':'e', 
+                    'í':'i', 
+                    'ó':'o', 
+                    'ú':'u', 
+                    'ñ':'n', '\xa0':''}, regex=True, inplace=True)
+            # cot_mod[column].replace(['sin informacion', '', '.', '-', '*', '..', '...', '....'], np.nan, inplace=True)
+    # print(cot_mod)
+    return cot_mod
