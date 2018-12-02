@@ -90,6 +90,13 @@ cot_all = pd.read_csv('Data/cotizaciones_all.csv', index_col=[0], encoding = "IS
 #personas que cotizaron en sdv sin haber hecho get dummies
 personas = pd.read_csv('Data/personas_filtro.csv', index_col=[0], encoding = "ISO-8859-1")
 personas_info = pd.read_csv('Data/personas_cotizacion10.csv', index_col=[0], encoding = "ISO-8859-1") # 
+productos = pd.read_csv('Data/productos.csv', index_col=[0], encoding = "ISO-8859-1") # 
+
+proyectos = ['Edificio Junge', 'Altos del Valle',
+'Edificio Mil610', 'San Andres Del Valle', 'Edificio Urban 1470' ]
+productos = productos[productos.Proyecto.isin(proyectos)]
+
+
 
 stop = timeit.default_timer()
 print('--END READ PERSONAS DATA','Time: ', stop - start)

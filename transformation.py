@@ -185,3 +185,115 @@ def transform_df_lower_accent(df):
             # cot_mod[column].replace(['sin informacion', '', '.', '-', '*', '..', '...', '....'], np.nan, inplace=True)
     # print(cot_mod)
     return cot_mod
+
+
+
+def get_products(x,word,numeric=False):
+    w=0
+    try:
+        p =str(x)
+        arr_p = x.split(',')
+        for e in arr_p:
+            if word in e:
+                w+=1
+                break
+            elif numeric and ('B' not in e or 'Est' not in e):
+                try:
+                    int(e)
+                    w+=1
+                except ValueError:
+                    pass
+        return w
+    except (ValueError,AttributeError):
+        try:
+            int(x)
+            if numeric:
+                return 1
+            else:
+                return 0
+        except ValueError:
+            return 0
+
+def transform_comp_cot(df):
+    
+    #Cantidad de productos
+    productos = cot_mod['Productos'].tolist()
+    depto = []; estacionamiento=[]; bodega = []; estudio = [];nan = 0
+
+    cot_mod['#vivienda'] = [get_products(x,'T',numeric=True) for x in productos]
+    cot_mod['#bodega'] = [get_products(x,'Bod') for x in productos]
+    cot_mod['#estacionamiento'] = [get_products(x,'Est') for x in productos]
+    cot_mod['#estudio'] = [get_products(x,'Estudio') for x in productos]
+    cot_mod['#lan'] = [get_products(x,'lan') for x in productos]
+
+    #(UF)Total Productos cotizados
+    precio_cotizacion_media = []
+    precio_cotizacion_std = []
+    precio_cotizacion_median = []
+    for group, frame in cot_mod.groupby('RUT'):
+        media = float("%.2f" % np.mean(frame['Total Productos'].tolist()))
+        std = float("%.2f" % np.std(frame['Total Productos'].tolist()))
+        median = float("%.2f" % np.median(frame['Total Productos'].tolist()))
+    #     print(group, media, std, median)
+        precio_cotizacion_media.append(media)
+        precio_cotizacion_std.append(std)
+        precio_cotizacion_median.append(median)
+
+    print(len(precio_cotizacion_media))
+    print(len(precio_cotizacion_std))
+    print(len(precio_cotizacion_median))
+
+    #Tiempo entre cotizaciones
+    cot_mod['Fecha Cotizacion'] = pd.to_datetime(cot_mod['Fecha Cotizacion'])
+    tiempo_cotizacion_media = []
+    tiempo_cotizacion_std = []
+    tiempo_cotizacion_median = []
+
+    for group, frame in cot_mod.groupby('RUT'):
+        l = frame['Fecha Cotizacion'].tolist()
+        l = [x.date() for x in l]
+        l = sorted(l, reverse=False)
+        d = []
+        anterior = l[0]
+        if len(l) != 1:
+            for i in range(1,len(l)):
+                try:
+                    dif = abs(int(str(l[i] - anterior).split(' ')[0]))
+                except ValueError:
+                    d.append(0)
+                anterior = l[i]
+                d.append(dif)
+            
+        else:
+            d.append(0)
+        mean = float( '%.2f'%np.mean(d))
+        std = float( '%.2f'%np.std(d))
+        median = float( '%.2f'%np.median(d))
+        tiempo_cotizacion_media.append(mean)
+        tiempo_cotizacion_std.append(std)
+        tiempo_cotizacion_median.append(median)
+
+    print(len(tiempo_cotizacion_media))
+    print(len(tiempo_cotizacion_std))
+    print(len(tiempo_cotizacion_median))   
+
+    # Cotizaciones por proyecto
+    rut_dict = dict()
+    for index, row in cot_mod.iterrows():
+        rut = row['Format Rut']
+        pr = row['Proyecto']
+        
+        if rut not in rut_dict.keys():
+            rut_dict[rut] = dict()
+            rut_dict[rut]['altos del valle'] = 0
+            rut_dict[rut]['edificio urban 1470'] = 0
+            rut_dict[rut]['san andres del valle'] = 0
+            rut_dict[rut]['edificio mil610'] = 0
+            rut_dict[rut]['edificio junge'] = 0
+        
+        rut_dict[rut][pr] +=1
+
+
+
+    rut_proyectos = pd.DataFrame.from_dict(rut_dict,orient='index').reset_index()
+    rut_proyectos.head()

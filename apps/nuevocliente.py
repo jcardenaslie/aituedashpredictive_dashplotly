@@ -58,7 +58,7 @@ layout = [
                     html.H6('Información Personal', style={"text-align":"center"}),
                     drc.Card(style={'overflow-y':'scroll', 'height':'400px'} ,children=[
                         html.Ul(id='nc_personal_info' ,children=[
-                            html.Li('Busca un rut'),
+                            html.Li('Agrega un cliente'),
                         ])
                     ])
             ]),
@@ -79,7 +79,7 @@ layout = [
                         children=[
                         html.Ul(id='nc_historical_info', 
                             children=[
-                                html.Li('Busca un rut'),
+                                html.Li('Agrega un cliente'),
                         ])
                     ])
             ]),
@@ -95,7 +95,7 @@ layout = [
                 html.Div(className='row', 
                     children=[
                         html.H6('Compra'),
-                        html.H3('0.00', id='indicator_nuevo_cliente_compra'),
+                        html.H3('---', id='indicator_nuevo_cliente_compra'),
                 ]),
             ]),
             html.Div(className='four columns',
@@ -109,7 +109,7 @@ layout = [
                 html.Div(className='row', 
                     children=[
                         html.H6('Negocio'),
-                        html.H3('0.00', id='indicator_nuevo_cliente_negocio'),
+                        html.H3('---', id='indicator_nuevo_cliente_negocio'),
                 ]),
             ]),
             html.Div(className='four columns', children=[
@@ -360,7 +360,7 @@ def nuevo_cliente_negocio_callback(n_clicks, personas_bd, rut):
         p = transform_prospect_display_text(p)
         p = html.H3('{}'.format(p))
         return p
-    return "0.00"
+    return "---"
 
 @app.callback(
     Output("indicator_nuevo_cliente_compra","children"),
@@ -398,7 +398,7 @@ def nuevo_cliente_compra_callback(n_clicks, personas_bd, rut):
         p = html.H3('{}'.format(p))
         # print(predict, predict_proba[0][1])
         return p
-    return '0.00'
+    return '---'
 
 
 ##########################################################################################################

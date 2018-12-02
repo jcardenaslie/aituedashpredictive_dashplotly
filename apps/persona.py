@@ -148,13 +148,18 @@ layout = [
 ##########################################################################################################
 # MODAL BASIC
 @app.callback(
+    # boton agregar
     Output("new_cot", "n_clicks"),
-    [Input("new_cot_modal_close", "n_clicks"), Input("submit_new_cot", "n_clicks")],
+    [Input("new_cot_modal_close", "n_clicks"), # boton cerrar modal
+    Input("submit_new_cot", "n_clicks")], # boton enviar form
 )
 def close_modal_callback(n, n2):
     return 0
 
-@app.callback(Output("new_cot_modal", "style"), [Input("new_cot", "n_clicks")])
+@app.callback(
+    Output("new_cot_modal", "style"), # el modal mismo
+    [Input("new_cot", "n_clicks")] # boton agregar cot
+    )
 def open_new_cot_modal_callback(n):
     if n > 0:
         return {"display": "block"}
@@ -162,6 +167,104 @@ def open_new_cot_modal_callback(n):
 
 
 
+
+# @app.callback(
+#     Output("cot_all_bd", "children"),
+#     [Input('submit_new_cot', 'n_clicks')],
+#        [
+#         State("new_cot_medio", "value"),
+#         State("new_cot_tipodemedio", "value"),
+#         State("new_cot_proyecto", "value"),
+#         State("new_cot_etapa", "value"),
+#         State("new_cot_presencial", "value"),
+#         State("new_cot_remoto", "value"),
+#         State("new_cot_productos", "value"),
+#         State("new_cot_descuento", "value"),
+#         State("new_cot_fecha", "value"),
+#         State("new_cot_totalproductos", "value"),
+#         State("new_cot_valorfinalventa", "value"),
+#         State("cot_all_bd", "children"),
+#         State("personas_bd_bd", "children"),
+#         State("input_buscar_persona", "value"),
+        
+#         ]
+#     # [Event('submit_new_case', 'n_click')]
+# )
+# def add_cotization(n_clicks, medio, tipomedio, proyecto, etapa, presencial,
+#     remoto, productos, descuento, fecha, totalproductos, valorventafinal,
+#     cot_all_bd, persona_bd, persona
+#     ):
+
+#     if n_clicks > 0 and len(persona) > 3:
+#         atributes = ['rut_original', 'nombre', 'apellido1', 'apellido2', 'nombre completo', 'telefono'
+#         'celular', 'correo', 'direccion', 'region', 'comuna', 'provincia', 'sexo', 'Estado Civil',
+#         'edad', 'fecha nacimiento', 'tipo_cliente', 'razon social', 'giro', 'nacionalidad'
+#         'nro grupo familiar', 'situacion laboral', 'empleador', 'antiguedad laboral', 'profesion']
+
+#         persona = personas_bd[personas_bd.rut == persona]
+#         print(persona)
+
+
+#     return cot_all_bd
+###################################################################################################
+#Modal Dropdowns
+@app.callback(
+    Output('new_cot_tipodemedio', 'options'),
+    [Input('new_cot_medio','value')]
+    )
+def modal_tipo_medio_callback(medio):
+    obj = [{"label": value, "value": value} 
+        for value in dm.cot_all[dm.cot_all['Medio'] == medio]['Tipo de Medio'].unique()]
+    return obj
+
+@app.callback(
+    Output('new_cot_etapa', 'options'),
+    [Input('new_cot_proyecto','value')]
+    )
+def modal_etapa_callback(proyecto):
+    obj = [{"label": value, "value": value} 
+        for value in dm.cot_all[dm.cot_all['Proyecto'] == proyecto]['Etapa'].unique()]
+    return obj
+
+@app.callback(
+    # Output('productos_shop', 'children'),
+    Output('new_cot_productos', 'options'),
+    [
+        Input('new_cot_etapa','value')
+    ],
+
+    )
+def modal_productos_callback(etapa ):
+    tmp = dm.productos[dm.productos['Etapa'] == etapa]
+    tmp = tmp[tmp['Estado'] == 'Disponible']
+    labels = tmp['Numero Unidad'].tolist()
+    labels2 = tmp['Tipo Unidad'].tolist()
+    values = tmp['ID'].tolist()
+
+    obj = [{"label": str(label2) + "/ " + str(label), "value": value} 
+        for label, label2, value in zip(labels, labels2, values)]
+
+    return obj
+
+@app.callback(
+    Output('new_cot_totalproductos', 'value'),
+    [Input('new_cot_productos', 'value'),
+    ],
+    )
+def modal_tipo_medio_callback(productos):
+    if isinstance(productos, str):
+        productos = [productos]
+    tmp = dm.productos[dm.productos['ID'].isin(productos)]
+    total = tmp['Precio Lista'].sum()
+    return total
+
+@app.callback(
+    Output('new_cot_valorfinalventa', 'value'),
+    [Input('new_cot_totalproductos', 'value')]
+)
+def valor_total_venta_callback(total):
+    print(total)
+    return total
 #############################################################################################################################
 ################## INFO DISPLAY
 @app.callback(

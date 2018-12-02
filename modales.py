@@ -2,6 +2,8 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from chile import regiones, provincias, comunas
+import data_manager as dm
+from datetime import date
 
 def modal_nuevo_cliente():
     return html.Div(
@@ -701,7 +703,7 @@ def modal_agregar_cotizacion():
                 # modal header
                 html.Div([
                     html.Span(
-                        "Agregar Cliente",
+                        "Agregar Cotizacion",
                         style={
                             "color": "#506784",
                             "fontWeight": "bold",
@@ -727,7 +729,136 @@ def modal_agregar_cotizacion():
                 html.Div([
                     # left Div
                     html.Div([
-                        
+                        #Presencial
+                        html.P(
+                            "Medio",
+                             style={
+                                "textAlign": "left",
+                                "marginBottom": "2",
+                                "marginTop": "4",
+                            },
+                        ),
+                        dcc.Dropdown(
+                            id="new_cot_medio",
+                            options=[
+                                {
+                                    "label": value,
+                                    "value": value,
+                                }
+                                for value in dm.cot_all.Medio.unique()
+                                        
+                            ],
+                            value="FINCO",
+                        ),
+                        #Presencial
+                        html.P(
+                            "Tipo Medio",
+                             style={
+                                "textAlign": "left",
+                                "marginBottom": "2",
+                                "marginTop": "4",
+                            },
+                        ),
+                        dcc.Dropdown(
+                            id="new_cot_tipodemedio",
+                            options=[
+                                {
+                                    "label": value,
+                                    "value": value,
+                                }
+                                for value in dm.cot_all['Tipo de Medio'].unique()
+                                        
+                            ],
+                            value="Base Finco 2018",
+                        ),
+                        #Presencial
+                        html.P(
+                            "Proyecto",
+                             style={
+                                "textAlign": "left",
+                                "marginBottom": "2",
+                                "marginTop": "4",
+                            },
+                        ),
+                        dcc.Dropdown(
+                            id="new_cot_proyecto",
+                            options=[
+                                {
+                                    "label": value,
+                                    "value": value,
+                                }
+                                for value in dm.cot_all['Proyecto'].unique()
+                                        
+                            ],
+                            value="Altos del Valle",
+                        ),
+                        #Presencial
+                        html.P(
+                            "Etapa",
+                             style={
+                                "textAlign": "left",
+                                "marginBottom": "2",
+                                "marginTop": "4",
+                            },
+                        ),
+                        dcc.Dropdown(
+                            id="new_cot_etapa",
+                            options=[
+                                {
+                                    "label": 'No disponible',
+                                    "value": 'No disponible',
+                                }
+                                
+                                        
+                            ],
+                            value="Altos del Valle",
+                        ),
+                        #Presencial
+                        html.P(
+                            "Presencial",
+                             style={
+                                "textAlign": "left",
+                                "marginBottom": "2",
+                                "marginTop": "4",
+                            },
+                        ),
+                        dcc.Dropdown(
+                            id="new_cot_presencial",
+                            options=[
+                                {
+                                    "label": "Si",
+                                    "value": "Si",
+                                },
+                                {
+                                    "label": "No",
+                                    "value": "No",
+                                },         
+                            ],
+                            value="No",
+                        ),
+                        #Presencial
+                        html.P(
+                            "Remoto",
+                             style={
+                                "textAlign": "left",
+                                "marginBottom": "2",
+                                "marginTop": "4",
+                            },
+                        ),
+                        dcc.Dropdown(
+                            id="new_cot_remoto",
+                            options=[
+                                {
+                                    "label": "Si",
+                                    "value": "Si",
+                                },
+                                {
+                                    "label": "No",
+                                    "value": "No",
+                                },         
+                            ],
+                            value="No",
+                        ),
                                         
                     ],
                     className="four columns",
@@ -737,7 +868,41 @@ def modal_agregar_cotizacion():
                 # left Div
                 html.Div(
                     [
-                                        
+                        #Presencial
+                        html.P(
+                            "Productos",
+                             style={
+                                "textAlign": "left",
+                                "marginBottom": "2",
+                                "marginTop": "4",
+                            },
+                        ),
+                        dcc.Dropdown(
+                                id="new_cot_productos",
+                                options=[
+                                    {
+                                        "label": "No Disponible",
+                                        "value": "No Disponible",
+                                    },        
+                                ],
+                                multi=True,
+                                value="No Disponible",
+                        ),
+                            html.P(
+                            "Descuento",
+                                style={
+                                    "textAlign": "left",
+                                    "marginBottom": "2",
+                                    "marginTop": "4",
+                                },
+                                ),
+                                dcc.Input(
+                                    id="new_cot_descuento",
+                                    placeholder="0",
+                                    type="number",
+                                    value="",
+                                    style={"width": "100%"},
+                                ),                   
                     ],
                     className="four columns",
                     style={"paddingRight": "15"},
@@ -747,7 +912,58 @@ def modal_agregar_cotizacion():
                 # right Div
                 html.Div(
                     [
-                                       
+                    html.P(
+                        [
+                            "Fecha"
+                        ],
+                        style={
+                            "textAlign": "left",
+                            "marginBottom": "2",
+                            "marginTop": "4",
+                    },
+                    ),
+                    html.Div(
+                         dcc.DatePickerSingle(
+                            id="new_cot_fecha",
+                            min_date_allowed=date.today(),
+                            initial_visible_month=date.today(),
+                            date=date.today(),
+                            disabled=True
+                        ),
+                        style={"textAlign": "left"},
+                    ),
+                            html.P(
+                            "Total Productos",
+                                style={
+                                    "textAlign": "left",
+                                    "marginBottom": "2",
+                                    "marginTop": "4",
+                                },
+                                ),
+                                dcc.Input(
+                                    id="new_cot_totalproductos",
+                                    placeholder="0",
+                                    type="number",
+                                    value="",
+                                    style={"width": "100%"},
+                                    disabled=True
+                                ),
+                            html.P(
+                                "Valor Final Venta",
+                                style={
+                                    "textAlign": "left",
+                                    "marginBottom": "2",
+                                    "marginTop": "4",
+                                },
+                                ),
+                            dcc.Input(
+                                    id="new_cot_valorfinalventa",
+                                    placeholder="0",
+                                    type="number",
+                                    value="",
+                                    style={"width": "100%"},
+                                    disabled=True
+                                ),        
                     ],
                     className="four columns",
                     style={"paddingLeft": "15"},

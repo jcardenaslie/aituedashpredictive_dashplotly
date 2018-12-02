@@ -38,7 +38,7 @@ app.layout = html.Div(children=[
                     dcc.Tab(label="Listas Clientes", value="lists_tab"),
                     
                 ],
-                value="nuevocliente_tab",
+                value="clientes_tab",
             )
 
             ],className="row tabs_div"
@@ -49,7 +49,8 @@ app.layout = html.Div(children=[
         ######################################################################################
         # html.Div(id="temporal_cliente", style={"display": "none"},),
         html.Div(dm.personas_info.to_json(orient='split'), id="personas_bd", style={"display": "none"},),
-        html.Div(dm.personas_info.shape[0], id="personas_bd_size", style={"display": "none"},),
+        html.Div(dm.cot_all.to_json(orient='split'), id="cot_all_bd", style={"display": "none"},),
+        # html.Div(dm.personas_info.shape[0], id="personas_bd_size", style={"display": "none"},),
         # html.Div(id="nuevo_cliente", style={"display": "none"},),
         html.Div(id="opportunities_df", style={"display": "none"},),
         
