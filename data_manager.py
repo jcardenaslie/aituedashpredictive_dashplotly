@@ -59,13 +59,6 @@ print('--END READ TEST DATA','Time: ', stop - start)
 ################################################################################################
 #MODELOS
 start = timeit.default_timer()
-# clf_compra_nois = joblib.load('Data/Models/RFCV2_compra_nois.joblib')
-# clf_negocio_nois = joblib.load('Data/Models/LRCV2_negocio_nois.joblib')
-
-
-# clf_compra_is = joblib.load('Data/Models/LRCV2_compra_is.joblib')
-# clf_negocio_is = joblib.load('Data/Models/RFCV2_negocio_is.joblib')
-
 clf_compra_nois = joblib.load('Data/Models/RFCV3_compra_nois.joblib')
 clf_negocio_nois = joblib.load('Data/Models/LRCV3_negocio_nois.joblib')
 clf_compra_is = joblib.load('Data/Models/RFCV3_compra_is.joblib')
