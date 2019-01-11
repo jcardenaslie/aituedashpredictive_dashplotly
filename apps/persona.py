@@ -146,7 +146,7 @@ layout = [
 ]
 
 ##########################################################################################################
-# MODAL BASIC
+# MODAL NUEVA COTIZACION BASIC
 @app.callback(
     # boton agregar
     Output("new_cot", "n_clicks"),
@@ -165,9 +165,8 @@ def open_new_cot_modal_callback(n):
         return {"display": "block"}
     return {"display": "none"}
 
-
-
-
+################################################################################################
+# MODAL NUEVA COTIZACION SUBMIT
 # @app.callback(
 #     Output("cot_all_bd", "children"),
 #     [Input('submit_new_cot', 'n_clicks')],
@@ -195,16 +194,18 @@ def open_new_cot_modal_callback(n):
 #     cot_all_bd, persona_bd, persona
 #     ):
 
-#     if n_clicks > 0 and len(persona) > 3:
-#         atributes = ['rut_original', 'nombre', 'apellido1', 'apellido2', 'nombre completo', 'telefono'
-#         'celular', 'correo', 'direccion', 'region', 'comuna', 'provincia', 'sexo', 'Estado Civil',
-#         'edad', 'fecha nacimiento', 'tipo_cliente', 'razon social', 'giro', 'nacionalidad'
-#         'nro grupo familiar', 'situacion laboral', 'empleador', 'antiguedad laboral', 'profesion']
+#     if n_clicks > 0:
+#         # print(n_clicks, medio, tipomedio, proyecto, etapa, presencial,
+#         #     remoto, productos, descuento, fecha, totalproductos, valorventafinal,
+#         #     cot_all_bd, persona_bd, persona)
+        
+#         # atributes = ['rut_original', 'nombre', 'apellido1', 'apellido2', 'nombre completo', 'telefono'
+#         # 'celular', 'correo', 'direccion', 'region', 'comuna', 'provincia', 'sexo', 'Estado Civil',
+#         # 'edad', 'fecha nacimiento', 'tipo_cliente', 'razon social', 'giro', 'nacionalidad'
+#         # 'nro grupo familiar', 'situacion laboral', 'empleador', 'antiguedad laboral', 'profesion']
 
-#         persona = personas_bd[personas_bd.rut == persona]
-#         print(persona)
-
-
+#         # persona = personas_bd[personas_bd.rut == persona]
+#         # print(persona)
 #     return cot_all_bd
 ###################################################################################################
 #Modal Dropdowns
@@ -266,7 +267,7 @@ def valor_total_venta_callback(total):
     print(total)
     return total
 #############################################################################################################################
-################## INFO DISPLAY
+################## INFO PERSONAL Y COTIZACION DISPLAY
 @app.callback(
     Output('list_personal_info', 'children'),
     [Input('button_search', 'n_clicks')],

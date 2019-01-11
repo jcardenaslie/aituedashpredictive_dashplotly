@@ -55,7 +55,7 @@ app.layout = html.Div(children=[
         html.Div(id="opportunities_df", style={"display": "none"},),
         
 
-
+        html.Link(href="/static/loading.css", rel="stylesheet"),
         ######################################################################################
         html.Link(href="https://use.fontawesome.com/releases/v5.2.0/css/all.css",
             rel="stylesheet"),

@@ -89,8 +89,6 @@ proyectos = ['Edificio Junge', 'Altos del Valle',
 'Edificio Mil610', 'San Andres Del Valle', 'Edificio Urban 1470' ]
 productos = productos[productos.Proyecto.isin(proyectos)]
 
-
-
 stop = timeit.default_timer()
 print('--END READ PERSONAS DATA','Time: ', stop - start)
 

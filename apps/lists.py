@@ -164,13 +164,17 @@ def rank_list_negocio_callback(dataset, modelo):
   'correo', 'edad', 'trabajo', 'tipo_cliente', 'sexo', 'actividad']
 
     new2 = new.merge(personas_info, left_on=to_merge, right_on=to_merge, how='left')
-    new2['valoración'] = [transform_prospect_display_text(x) for x in new2['t_proba'].tolist()]
+    # new2['valoración'] = [transform_prospect_display_text(x) for x in new2['t_proba'].tolist()]
+    new2['valoración'] = new2['t_proba']
 
-
-    df = new2[['rut', 'nombre','correo', 'valoración', 'celular', 't_proba']]
+    df = new2[['rut', 'nombre','correo', 
+    'valoración', 
+    'celular', 't_proba']]
     df = df.sort_values(by='t_proba', ascending=False)
     
-    df = df[['valoración','rut', 'nombre','correo', 'celular']].head(30)
+    df = df[[
+    'valoración',
+    'rut', 'nombre','correo', 'celular']].head(30)
     return df_to_table(df)
 
 @app.callback(
@@ -204,12 +208,16 @@ def rank_list_compra_callback(dataset, modelo):
                 'correo', 'edad', 'trabajo', 'tipo_cliente', 'sexo', 'actividad']
 
     new2 = new.merge(personas_info, left_on=to_merge, right_on=to_merge, how='left')
-    new2['valoración'] = [transform_prospect_display_text(x) for x in new2['t_proba'].tolist()]
+    # new2['valoración'] = [transform_prospect_display_text(x) for x in new2['t_proba'].tolist()]
+    new2['valoración'] = new2['t_proba']
 
-
-    df = new2[['rut', 'nombre','correo', 'valoración', 'celular', 't_proba']]
+    df = new2[['rut', 'nombre','correo', 
+    'valoración', 
+    'celular', 't_proba']]
     df = df.sort_values(by='t_proba', ascending=False)
     
-    df = df[['valoración','rut', 'nombre','correo', 'celular']].head(30)
+    df = df[[
+    'valoración',
+    'rut', 'nombre','correo', 'celular']].head(30)
     return df_to_table(df)
 
